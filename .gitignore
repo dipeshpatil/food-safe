@@ -105,3 +105,6 @@ dist
 
 # default.json config
 default.json
+
+# ignore substance_response file
+substance_response.json

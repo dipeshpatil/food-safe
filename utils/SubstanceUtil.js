@@ -45,7 +45,7 @@ class SubstanceUtil {
       substancesList.push(new Substance(data));
     });
 
-    fs.writeFileSync("response.json", JSON.stringify(substancesList, null, 2));
+    fs.writeFileSync("substance_response.json", JSON.stringify(substancesList, null, 2));
     return substancesList;
   }
 }
