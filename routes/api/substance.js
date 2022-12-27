@@ -3,6 +3,13 @@ const request = require("request");
 const config = require("config");
 
 const router = express.Router();
+const { check, validationResult } = require("express-validator");
+
+// Middlewares
+const auth = require("./../../middleware/auth");
+
+// Models
+const Substance = require("../../models/Substance");
 
 const { SERVER_ERROR } = require("./../../strings/errors.json");
 
@@ -27,5 +34,49 @@ router.get("/", async (req, res) => {
     res.status(500).send(SERVER_ERROR);
   }
 });
+
+/**
+ * @route   POST api/substance
+ * @desc    Add a substance to db
+ * @access  Private
+ */
+router.post(
+  "/",
+  [
+    auth,
+    [
+      check("name", "name is required").not().isEmpty(),
+      check("iconFlag", "iconFlag is required").not().isEmpty(),
+      check("flag", "flag is required").not().isEmpty(),
+      check("purpose", "purpose is required").not().isEmpty(),
+      check("additionalData", "additionalData is required").not().isEmpty(),
+    ],
+  ],
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      const newSubstance = {
+        user: req.user.id,
+        name: req.body.name,
+        iconFlag: req.body.iconFlag,
+        flag: req.body.flag,
+        purpose: req.body.purpose,
+        healthConcern: req.body.healthConcern,
+        additionalData: req.body.additionalData,
+      };
+      const substance = new Substance(newSubstance);
+      await substance.save();
+
+      res.json(substance);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server Error");
+    }
+  }
+);
 
 module.exports = router;
