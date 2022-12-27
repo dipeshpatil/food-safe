@@ -5,6 +5,8 @@ const config = require("config");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
 
+const ObjectId = require("mongoose").Types.ObjectId;
+
 // Middlewares
 const auth = require("./../../middleware/auth");
 
@@ -59,19 +61,28 @@ router.post(
         return res.status(400).json({ errors: errors.array() });
       }
 
-      const newSubstance = {
-        user: req.user.id,
+      const substanceExists = await Substance.findOne({
         name: req.body.name,
-        iconFlag: req.body.iconFlag,
-        flag: req.body.flag,
-        purpose: req.body.purpose,
-        healthConcern: req.body.healthConcern,
-        additionalData: req.body.additionalData,
-      };
-      const substance = new Substance(newSubstance);
-      await substance.save();
+        user: ObjectId(req.user.id),
+      });
 
-      res.json(substance);
+      if (!substanceExists) {
+        const newSubstance = {
+          user: req.user.id,
+          name: req.body.name,
+          iconFlag: req.body.iconFlag,
+          flag: req.body.flag,
+          purpose: req.body.purpose,
+          healthConcern: req.body.healthConcern,
+          additionalData: req.body.additionalData,
+        };
+        const substance = new Substance(newSubstance);
+        await substance.save();
+
+        res.json(substance);
+      } else {
+        res.json({ msg: "Substance Already Exists!" });
+      }
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server Error");
