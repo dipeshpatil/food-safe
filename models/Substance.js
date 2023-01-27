@@ -1,9 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose')
 
 const SubstanceSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
+    ref: 'user',
   },
   name: {
     type: String,
@@ -32,6 +32,6 @@ const SubstanceSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-});
+})
 
-module.exports = Substance = mongoose.model("substance", SubstanceSchema);
+module.exports = Substance = mongoose.model('substance', SubstanceSchema)

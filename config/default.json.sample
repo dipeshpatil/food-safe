@@ -11,5 +11,8 @@
       "url": "",
       "endpoint": ""
     }
+  },
+  "app": {
+    "serverPort": 3001
   }
 }

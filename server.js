@@ -1,24 +1,26 @@
-const express = require("express");
-const connectDB = require("./config/database");
+const express = require('express')
+const config = require('config')
 
-const substanceRoute = require("./routes/api/substance");
-const authRoute = require("./routes/api/auth");
-const userRoute = require("./routes/api/user");
+const connectDB = require('./config/database')
 
-const app = express();
+const substanceRoute = require('./routes/api/substance')
+const authRoute = require('./routes/api/auth')
+const userRoute = require('./routes/api/user')
+
+const app = express()
 
 // Connect Database
-connectDB();
+connectDB()
 
 // Init Middleware
-app.use(express.json({ extended: false }));
+app.use(express.json({extended: false}))
 
-app.get("/", (req, res) => res.send("API Running"));
+app.get('/', (req, res) => res.send('API Running'))
 
 // Define Routes
-app.use("/api/auth", authRoute);
-app.use("/api/user", userRoute);
-app.use("/api/substance", substanceRoute);
+app.use('/api/auth', authRoute)
+app.use('/api/user', userRoute)
+app.use('/api/substance', substanceRoute)
 
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+const PORT = process.env.PORT || config.get('app.serverPort') || 3001
+app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
