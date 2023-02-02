@@ -3,12 +3,16 @@ const fs = require('fs');
 const HTMLParser = require('node-html-parser');
 const config = require('config');
 
-const URL = config.get('api.substance.url');
-
 class Substance {
   constructor(substanceObj = {}) {
-    const {cell_0, cell_0_icon_classname, cell_0_rich, cell_1, cell_2, cell_3} =
-      substanceObj;
+    const {
+      cell_0,
+      cell_0_icon_classname,
+      cell_0_rich,
+      cell_1,
+      cell_2,
+      cell_3,
+    } = substanceObj;
 
     this.name = cell_0;
     this.iconFlag = cell_0_icon_classname;
@@ -25,7 +29,7 @@ class Substance {
       substitution: nodeAttributes['data-entity-substitution'],
       type: nodeAttributes['data-entity-type'],
       uuid: nodeAttributes['data-entity-uuid'],
-      href: URL + nodeAttributes['href'],
+      href: config.get('api.substance.url') + nodeAttributes['href'],
     };
   }
 }
@@ -33,13 +37,16 @@ class Substance {
 class SubstanceUtil {
   static getSubstancesList(response) {
     const substancesList = [];
-    const {table_data} = JSON.parse(response);
+    const { table_data } = JSON.parse(response);
 
     table_data.forEach((data) => {
       substancesList.push(new Substance(data));
     });
 
-    fs.writeFileSync('substance_response.json', JSON.stringify(substancesList, null, 2));
+    fs.writeFileSync(
+      'substance_response.json',
+      JSON.stringify(substancesList, null, 2),
+    );
     return substancesList;
   }
 }

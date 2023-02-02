@@ -3,7 +3,7 @@ const request = require('request');
 const config = require('config');
 
 const router = express.Router();
-const {check, validationResult} = require('express-validator');
+const { check, validationResult } = require('express-validator');
 
 const ObjectId = require('mongoose').Types.ObjectId;
 
@@ -12,10 +12,10 @@ const auth = require('./../../middleware/auth');
 
 // Models
 const Substance = require('../../models/Substance');
-
-const {SERVER_ERROR} = require('./../../strings/errors.json');
-
 const SubstanceUtil = require('./../../utils/SubstanceUtil');
+
+const { ErrorConstants } = require('../../strings/app.constants');
+
 const API_ENDPOINT = config.get('api.substance.endpoint');
 
 /**
@@ -26,12 +26,14 @@ const API_ENDPOINT = config.get('api.substance.endpoint');
 router.get('/', async (req, res) => {
   try {
     request(API_ENDPOINT, (error, response, body) => {
-      if (error) res.status(500).send(SERVER_ERROR);
-      res.status(response.statusCode).json(SubstanceUtil.getSubstancesList(body));
+      if (error) res.status(500).send(ErrorConstants.SERVER_ERROR);
+      res
+        .status(response.statusCode)
+        .json(SubstanceUtil.getSubstancesList(body));
     });
   } catch (err) {
     console.error(err.message);
-    res.status(500).send(SERVER_ERROR);
+    res.status(500).send(ErrorConstants.SERVER_ERROR);
   }
 });
 
@@ -56,7 +58,7 @@ router.post(
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.status(400).json({errors: errors.array()});
+        return res.status(400).json({ errors: errors.array() });
       }
 
       const substanceExists = await Substance.findOne({
@@ -79,7 +81,7 @@ router.post(
 
         res.json(substance);
       } else {
-        res.json({msg: 'Substance Already Exists!'});
+        res.json({ msg: 'Substance Already Exists!' });
       }
     } catch (err) {
       console.error(err.message);
