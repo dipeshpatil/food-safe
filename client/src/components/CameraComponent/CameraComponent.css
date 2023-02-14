@@ -1,0 +1,9 @@
+.camera-component {
+  width: 100%;
+  height: 500px;
+  padding: 15px;
+}
+
+.camera-component .webcam {
+  margin-top: 10px;
+}

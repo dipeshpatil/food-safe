@@ -1,23 +1,23 @@
-import logo from './logo.svg';
+import { Row, Col } from 'react-bootstrap';
+
+import NaviBar from './components/NaviBar/NaviBar';
+import BasePage from './components/BasePage/BasePage';
+import CameraComponent from './components/CameraComponent/CameraComponent';
+
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <NaviBar />
+      <BasePage>
+        <Row>
+          <Col sm={6}>
+            <CameraComponent />
+          </Col>
+          <Col sm={6}></Col>
+        </Row>
+      </BasePage>
     </div>
   );
 }
