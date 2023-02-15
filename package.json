@@ -4,6 +4,8 @@
   "description": "Is my food safe ?",
   "main": "server.js",
   "scripts": {
+    "encrypt:config": "TYPE=encrypt FILE_TO_BE_ENCRYPTED='./config/default.json' node crypt.js",
+    "decrypt:config": "TYPE=decrypt FILE_TO_BE_DECRYPTED='./config/default.json.enc' node crypt.js",
     "start": "node server",
     "server": "PORT=3001 nodemon server"
   },
